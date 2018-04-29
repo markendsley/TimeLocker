@@ -24,6 +24,7 @@ import javax.crypto.ShortBufferException;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -49,7 +50,8 @@ public class TimeLocker extends JFrame{
         
         box = Box.createVerticalBox();
         
-       
+        ImageIcon img = new ImageIcon("logo.png");
+        this.setIconImage(img.getImage());
         
         stringLabel = new JLabel("String");
         box.add(stringLabel);
@@ -96,6 +98,21 @@ public class TimeLocker extends JFrame{
                 public void actionPerformed(ActionEvent e) {
                 
                     try {
+                        
+                        if(yearBox.getText().length() != 4){
+                            resultBox.setText("Year must be 4 digits");
+                            return;
+                        }
+                        else if(monthBox.getText().length() < 1 || monthBox.getText().length() > 2){
+                            resultBox.setText("Month doesn't make sense");
+                            return;
+                        }
+                        else if(dayBox.getText().length() < 1 || dayBox.getText().length() > 2){
+                            resultBox.setText("Month doesn't make sense");
+                            return;
+                        }
+                            
+                        
                         writeEntry(yearBox.getText() + " " + monthBox.getText() + " " + dayBox.getText() + " " + hourBox.getText() + " " + minuteBox.getText() ,contentBox.getText());
                         
                     } catch (NoSuchAlgorithmException ex) {
@@ -155,8 +172,9 @@ public class TimeLocker extends JFrame{
                         entry.readContent();
                         
                         
-                        if(testDate(entry)){
+                        if(!testDate(entry)){
                             
+                            System.out.println("AAAA");
                             JOptionPane.showMessageDialog(null, "The date for this entry is not here yet");
                             return;
                             
@@ -274,35 +292,37 @@ public class TimeLocker extends JFrame{
         setHour = Integer.parseInt(setArray[3]);
         setMinute = Integer.parseInt(setArray[4]);
         
-        System.out.println("Current date is: " + curArray[0] + "Set date is: " + setArray[0] );
+        System.out.println(fullCurrent);
+        System.out.println(curYear);
+        System.out.println(curMonth);
+        System.out.println(curDay);
+        System.out.println(curHour);
+        System.out.println(curMinute);
+        
         
         System.out.println(curYear + "is more than" + setYear);
         
         
-        if(curYear > setYear){
+        if(curYear > setYear)
+            return true;
+        if(curYear < setYear)
             return false;
-        }
-            
-        else if(curMonth > setMonth){
-            
+        if(curMonth > setMonth)
+            return true;
+        if(curMonth < setMonth)
             return false;
-        }
-            
-        else if(curDay > setDay){
+        if(curDay > setDay)
+            return true;
+        if(curDay < setDay)
             return false;
-        }
-            
-        else if(curHour > setHour){
+        if(curHour > setHour)
+            return true;
+        if(curHour < setHour)
             return false;
-        }
-            
-        else if(curMinute > setMinute){
+        if(curMinute > setMinute)
+            return true;
+        if(curMinute < setMinute)
             return false;
-        }
-            
-        
-        
-        
         
         
         return true;
