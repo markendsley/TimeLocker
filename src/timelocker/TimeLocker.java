@@ -2,6 +2,7 @@
 package timelocker;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,11 +22,13 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.ShortBufferException;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
@@ -46,6 +49,7 @@ public class TimeLocker extends JFrame{
         
         box = Box.createVerticalBox();
         
+       
         
         stringLabel = new JLabel("String");
         box.add(stringLabel);
@@ -79,6 +83,8 @@ public class TimeLocker extends JFrame{
         
         JButton createButton = new JButton( "Create Entry" );
         box.add(createButton);
+        createButton.setBackground(Color.darkGray);
+        createButton.setForeground(Color.WHITE);
         
         
         createButton.addActionListener(
@@ -126,6 +132,74 @@ public class TimeLocker extends JFrame{
         resultBox = new JTextField();
         box.add(resultBox);
         
+        
+        JButton retrieveButton = new JButton( "Get Entry" );
+        box.add(retrieveButton);
+        retrieveButton.setBackground(Color.darkGray);
+        retrieveButton.setForeground(Color.WHITE);
+        
+        
+        retrieveButton.addActionListener(
+        
+            new ActionListener(){
+                    
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                
+                    //TODO May need to delete this code
+                    
+                    
+                    try {
+                        Entry entry = new Entry();
+                        entry.readContent();
+                        
+                        
+                        if(testDate(entry)){
+                            
+                            JOptionPane.showMessageDialog(null, "The date for this entry is not here yet");
+                            return;
+                            
+                        }
+                        
+                        resultBox.setText(entry.content);
+                      
+                        
+                    } catch (NoSuchAlgorithmException ex) {
+                        Logger.getLogger(TimeLocker.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (NoSuchPaddingException ex) {
+                        Logger.getLogger(TimeLocker.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InvalidKeyException ex) {
+                        Logger.getLogger(TimeLocker.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InvalidAlgorithmParameterException ex) {
+                        Logger.getLogger(TimeLocker.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalBlockSizeException ex) {
+                        Logger.getLogger(TimeLocker.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (BadPaddingException ex) {
+                        Logger.getLogger(TimeLocker.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(TimeLocker.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                
+                    
+                
+                
+                }
+                    
+            }
+        
+        );
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         add (box, BorderLayout.NORTH);
         
         
@@ -158,6 +232,7 @@ public class TimeLocker extends JFrame{
         Entry entry = new Entry(givenDate, content);
         String temp = entry.encryptContent();
         entry.writeContent(temp);
+       
     }
     
     private void extractInput() throws FileNotFoundException{
@@ -173,5 +248,63 @@ public class TimeLocker extends JFrame{
         
         
         
+    }
+    
+    public boolean testDate(Entry entry) throws InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+        
+        String fullCurrent = getCurrentDate();
+        String fullSet = entry.decryptedDate();
+        
+        
+        
+        int curYear,curMonth,curDay, curHour, curMinute;
+        int setYear,setMonth,setDay, setHour, setMinute;
+        String curArray[] = fullCurrent.split(" ");
+        String setArray[] = fullSet.split(" ");
+        
+        curYear = Integer.parseInt(curArray[0]);
+        curMonth = Integer.parseInt(curArray[1]);
+        curDay = Integer.parseInt(curArray[2]);
+        curHour = Integer.parseInt(curArray[3]);
+        curMinute = Integer.parseInt(curArray[4]);
+        
+        setYear = Integer.parseInt(setArray[0]);
+        setMonth = Integer.parseInt(setArray[1]);
+        setDay = Integer.parseInt(setArray[2]);
+        setHour = Integer.parseInt(setArray[3]);
+        setMinute = Integer.parseInt(setArray[4]);
+        
+        System.out.println("Current date is: " + curArray[0] + "Set date is: " + setArray[0] );
+        
+        System.out.println(curYear + "is more than" + setYear);
+        
+        
+        if(curYear > setYear){
+            return false;
+        }
+            
+        else if(curMonth > setMonth){
+            
+            return false;
+        }
+            
+        else if(curDay > setDay){
+            return false;
+        }
+            
+        else if(curHour > setHour){
+            return false;
+        }
+            
+        else if(curMinute > setMinute){
+            return false;
+        }
+            
+        
+        
+        
+        
+        
+        return true;
     }
 }
