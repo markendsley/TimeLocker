@@ -42,7 +42,7 @@ public class Entry {
         ivBytes = "Markasdl".getBytes();
         
         key = new SecretKeySpec(keyBytes, "Blowfish");
-        //ivSpec = new IvParameterSpec(ivBytes);
+        
         cipher = Cipher.getInstance("Blowfish");
         
         input = content.getBytes();
@@ -59,10 +59,10 @@ public class Entry {
         ivBytes = "Markasdl".getBytes();
         
         key = new SecretKeySpec(keyBytes, "Blowfish");
-        //ivSpec = new IvParameterSpec(ivBytes);
+       
         cipher = Cipher.getInstance("Blowfish");
         
-        //input = content.getBytes();
+        
         
         
         
@@ -157,7 +157,7 @@ public class Entry {
         
         String tempContent;
         
-        //Ok decryption is fucked up
+       
         
         
             Scanner scanner;
