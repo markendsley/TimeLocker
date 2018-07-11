@@ -9,12 +9,18 @@ package timelocker;
 
 public class Decrypter {
     
-    String input;
+    
+    public String date;
+    public String content;
     
     
-    public Decrypter(String input){
+    public Decrypter(String date, String content){
         
-        this.input = input;
+        this.date = date;
+        this.content = content;
+        
+        
+        
     }
     
 }
